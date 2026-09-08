@@ -12,6 +12,117 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
 
+    <style>
+        /* ===== FIX: ensure all sections have proper anchor offset ===== */
+        section[id],
+        div[id] {
+            scroll-margin-top: 80px;
+        }
+
+        /* ===== mobile menu overlay fix ===== */
+        #mobileOverlay {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1055;
+        }
+
+        #mobileOverlay.show {
+            display: block !important;
+        }
+
+        #mobileMenu {
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1060;
+        }
+
+        #mobileMenu.open {
+            transform: translateX(0);
+        }
+
+        /* ===== toast container ===== */
+        #toastContainer {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 360px;
+            width: 100%;
+        }
+
+        .toast-custom {
+            background: rgba(10, 14, 30, 0.96);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px 20px;
+            color: #fff;
+            font-size: 14px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+            animation: slideInToast 0.4s ease;
+            margin-bottom: 10px;
+        }
+
+        .toast-custom.success {
+            border-left: 4px solid #28a745;
+        }
+        .toast-custom.error {
+            border-left: 4px solid #dc3545;
+        }
+        .toast-custom.info {
+            border-left: 4px solid #17a2b8;
+        }
+
+        @keyframes slideInToast {
+            0% {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .toast-custom .toast-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+        .toast-custom .toast-close:hover {
+            color: #fff;
+        }
+
+        /* ===== WhatsApp button in contact area ===== */
+        .whatsapp-contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #25D366;
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.35);
+            border: none;
+            font-size: 1rem;
+        }
+        .whatsapp-contact-btn:hover {
+            background: #1da851;
+            color: #fff;
+            transform: scale(1.03);
+            box-shadow: 0 12px 40px rgba(37, 211, 102, 0.5);
+        }
+        .whatsapp-contact-btn i {
+            font-size: 1.6rem;
+        }
+    </style>
+
 </head>
 <body>
 
@@ -19,26 +130,26 @@
     <div id="toastContainer"></div>
 
     <!-- ============================================================
-    NAVIGATION – Book Service on right side (desktop) + always visible (mobile)
+    NAVIGATION – "Book Service" now opens WhatsApp
     ============================================================ -->
     <nav id="navbar" class="navbar navbar-expand-lg fixed-top bg-transparent py-0 transition-all duration-500" style="min-height: 5rem; z-index:1050;">
         <div class="container-custom d-flex align-items-center justify-content-between h-100 w-100">
 
             <!-- Brand -->
-            <a href="#" class="text-decoration-none d-flex align-items-center gap-2 flex-shrink-0">
+            <a href="#home" class="text-decoration-none d-flex align-items-center gap-2 flex-shrink-0">
                 <div class="d-flex align-items-center justify-content-center rounded-3 shadow-lg" style="width:35px; height:35px; border: 1px solid rgba(255,255,255,0.2); background: linear-gradient(135deg, #00b4d8, #7b61ff);">
-                    <h6 class="text-white mb-0" style="font-size: 12px;">WCC</h6>
+                    <h6 class="text-white mb-0" style="font-size: 13px;">WCC</h6>
                 </div>
                 <div>
-                    <span class="text-white fw-bold d-block lh-1" style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1.1rem;">Weston Cool Care</span>
-                    <span class="text-info text-uppercase" style="font-size:0.6rem; letter-spacing:0.1em; color: rgba(255,255,255,0.5);">Repair &amp; Service</span>
+                    <span class="top_westoncool text-white d-block lh-1" style=" font-weight: 800; font-family:'Plus Jakarta Sans',sans-serif; font-size:1.1rem;">Weston Cool Care</span>
+                    <span class=" top_westoncool text-info text-uppercase" style=" font-weight: 800; font-size:0.7rem; letter-spacing:0.1em; color: rgba(255,255,255,0.5);">Repair &amp; Service</span>
                 </div>
             </a>
 
             <!-- ===== RIGHT SIDE GROUP (Mobile/Tablet only) ===== -->
             <div class="d-flex d-lg-none align-items-center gap-2 gap-sm-3 flex-shrink-0">
-                <!-- Mobile Book Service Button -->
-                <a href="#contact" class="btn-book-only">
+                <!-- Mobile Book Service → WhatsApp -->
+                <a href="https://wa.me/+919821935286?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" rel="noopener noreferrer" class="btn-book-only">
                     <i class="fas fa-calendar-check"></i>
                     <span>Book Service</span>
                 </a>
@@ -60,9 +171,9 @@
                     <li class="nav-item"><a href="#faq" class="nav-link text-white nav-link-underline">FAQ</a></li>
                     <li class="nav-item"><a href="#contact" class="nav-link text-white nav-link-underline">Contact</a></li>
 
-                    <!-- ✅ Desktop Book Service Button – right side, where "Contact" is -->
+                    <!-- ✅ Desktop "Book Service" → WhatsApp -->
                     <li class="nav-item d-none d-lg-block">
-                        <a href="#contact" class="btn-book-nav ms-2">
+                        <a href="#contact" target="_blank" rel="noopener noreferrer" class="btn-book-nav ms-2">
                             <i class="fas fa-calendar-check"></i> Book Service
                         </a>
                     </li>
@@ -72,8 +183,8 @@
         </div>
     </nav>
 
-    <!-- ===== MOBILE MENU (off-canvas slide-in) ===== -->
-    <div id="mobileMenu" class="mobile-menu position-fixed top-0 end-0 h-100 bg-dark-900 p-4" style="width:300px; z-index:1060; backdrop-filter:blur(20px); background: rgba(10,14,30,0.96) !important; border-left: 1px solid rgba(255,255,255,0.06); box-shadow: -10px 0 40px rgba(0,0,0,0.5);">
+    <!-- ===== MOBILE MENU – "Book Service Now" → WhatsApp ===== -->
+    <div id="mobileMenu" class="mobile-menu position-fixed top-0 end-0 h-100 p-4" style="width:300px; z-index:1060; backdrop-filter:blur(20px); background: rgba(10,14,30,0.96) !important; border-left: 1px solid rgba(255,255,255,0.06); box-shadow: -10px 0 40px rgba(0,0,0,0.5);">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <span class="text-white fw-bold fs-5" style="font-family:'Plus Jakarta Sans',sans-serif;">Menu</span>
             <button id="mobileClose" class="btn btn-link text-white-70 p-0"><i class="fas fa-times fs-4"></i></button>
@@ -89,7 +200,8 @@
             <a href="#contact" class="mobile-link text-white-80 px-3 py-2 rounded-3 text-decoration-none fw-medium">Contact</a>
         </div>
         <div class="mt-4 pt-4 border-top border-white-10" style="border-color: rgba(255,255,255,0.1) !important;">
-            <a href="#contact" class="btn-book-only w-100 py-3 rounded-3 fw-semibold text-center" style="justify-content:center; border-radius: 50rem !important;">
+            <!-- Mobile menu "Book Service Now" → WhatsApp -->
+            <a href="https://wa.me/+919821935286?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" rel="noopener noreferrer" class="btn-book-only w-100 py-3 rounded-3 fw-semibold text-center" style="justify-content:center; border-radius: 50rem !important;">
                 <i class="fas fa-calendar-check"></i> Book Service Now
             </a>
         </div>
@@ -97,9 +209,9 @@
     <div id="mobileOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-none"></div>
 
     <!-- ============================================================
-    EXPERT CAR AC REPAIR & SERVICE SECTION
+    HOME – HERO SECTION
     ============================================================ -->
-    <section class="hero-section">
+    <section id="home" class="hero-section">
 
         <!-- Glowing Orbs -->
         <div class="orb orb--top-right"></div>
@@ -108,12 +220,9 @@
 
         <div class="container-fluid hero-container">
 
-            <!-- Row: Left Content + Right Visual -->
             <div class="row align-items-stretch g-4">
 
-                <!-- =============================================
-                LEFT CONTENT
-                ============================================= -->
+                <!-- LEFT CONTENT -->
                 <div class="col-lg-7 col-md-6 col-12 d-flex flex-column justify-content-center">
                     <h1 class="hero-title mb-3 mt-5">
                         Expert Car AC Repair &amp; <span class="gradient-text">Service in Noida</span>
@@ -125,37 +234,31 @@
                         with experienced technicians and specialized car AC expertise.
                     </p>
 
-                    <!-- Feature List -->
                     <ul class="feature-list mb-4">
                         <li><i class="fas fa-award"></i> 18+ Years AC Expertise</li>
                         <li><i class="fas fa-clock"></i> Fast 15-Min Diagnosis</li>
                         <li><i class="fas fa-truck"></i> Pickup &amp; Drop in Noida</li>
                     </ul>
 
-                    <!-- Action Buttons -->
                     <div class="d-flex flex-wrap gap-2 feature-buttons mb-3">
-                        <a href="#contact" class="feature-btn feature-btn--primary">
+                        <!-- Hero "Book Car AC Service" → WhatsApp -->
+                        <a href="#contact" target="_blank" rel="noopener noreferrer" class="feature-btn feature-btn--primary">
                             <i class="fas fa-book-open"></i> Book Car AC Service
                         </a>
-                        <a href="https://wa.me/919876543210?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" class="feature-btn feature-btn--whatsapp">
-                            <i class="fab fa-whatsapp"></i> WhatsApp Inquiry
+                        <a href="https://wa.me/+91 9821935286?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" class="feature-btn feature-btn--whatsapp" style="font-size: 17px;">
+                            <i class="fab fa-whatsapp" style="font-size:25px; color: white;"></i> WhatsApp Inquiry
                         </a>
-                        <a href="tel:+919876543210" class="feature-btn feature-btn--call">
-                            <i class="fas fa-phone"></i> Call Now
+                        <a href="tel:+91 9821935286" class="feature-btn feature-btn--call" style="font-size: 17px;">
+                            <i class="fas fa-phone" style="font-size:25px; color: red;"></i> Call Now
                         </a>
                     </div>
                 </div>
 
-                <!-- =============================================
-                RIGHT VISUAL – IMAGE + OVERLAY + STATS
-                ============================================= -->
+                <!-- RIGHT VISUAL -->
                 <div class="col-lg-5 col-md-6 col-12 d-flex">
                     <div class="right-visual-card w-100 mt-5">
-
-                        <!-- Image with Overlay -->
                         <div class="image-wrapper">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcOFxje9-jvvjCeyATkl3G37sSPGuFdKrTJrp-sXf9xQ&s=10" alt="Car AC Service Specialist" class="img-fluid" />
-                            <!-- Overlay Text -->
+                            <img src="/assets/images/gasimage.png" alt="Car AC Service Specialist" class="img-fluid" />
                             <div class="image-overlay">
                                 <div class="overlay-title">Car AC Specialists</div>
                                 <div class="overlay-sub">
@@ -163,10 +266,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Stats Grid -->
                         <div class="stats-grid-inner">
-                            <!-- Stat 1 -->
                             <div class="stat-mini">
                                 <div class="mini-label">
                                     <i class="fas fa-microscope" style="color:rgba(255,255,255,0.2);margin-right:0.2rem;"></i>
@@ -176,7 +276,6 @@
                                     <i class="fas fa-location-dot"></i> Sector 66 Workbay
                                 </div>
                             </div>
-                            <!-- Stat 2 -->
                             <div class="stat-mini">
                                 <div class="mini-label">
                                     <i class="fas fa-snowflake" style="color:rgba(255,255,255,0.2);margin-right:0.2rem;"></i>
@@ -186,7 +285,6 @@
                                     <i class="fas fa-thermometer-half"></i> Sub 8°C Vent
                                 </div>
                             </div>
-                            <!-- Stat 3 -->
                             <div class="stat-mini">
                                 <div class="mini-label">
                                     <i class="fas fa-flask" style="color:rgba(255,255,255,0.2);margin-right:0.2rem;"></i>
@@ -197,14 +295,10 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                    <!-- /right-visual-card -->
                 </div>
-                <!-- /col -->
 
             </div>
-            <!-- /row -->
 
             <!-- Address Bar -->
             <div class="row mt-4">
@@ -219,8 +313,6 @@
             </div>
 
         </div>
-        <!-- /hero-container -->
-
     </section>
 
     <!-- ============================================================
@@ -229,7 +321,6 @@
     <section class="py-4 border-top border-bottom border-white-5" style="background: rgb(10, 13, 20);">
         <div class="container-custom">
             <p class="text-center text-white small text-uppercase fw-bold" style="letter-spacing:0.1em;">We Service All Major Car Brands</p>
-
             <marquee behavior="scroll" direction="right" scrollamount="5">
                 <div class="d-flex flex-nowrap align-items-center gap-4 gap-md-5">
                     <span class="text-danger fw-bold fs-5 text-nowrap" style="font-family:'Plus Jakarta Sans',sans-serif;">Maruti Suzuki</span>
@@ -240,16 +331,17 @@
                     <span class="text-danger fw-bold fs-5 text-nowrap" style="font-family:'Plus Jakarta Sans',sans-serif;">Mahindra</span>
                     <span class="text-danger fw-bold fs-5 text-nowrap" style="font-family:'Plus Jakarta Sans',sans-serif;">Kia</span>
                     <span class="text-danger fw-bold fs-5 text-nowrap" style="font-family:'Plus Jakarta Sans',sans-serif;">BMW</span>
+                    <span class="text-danger fw-bold fs-5 text-nowrap" style="font-family:'Plus Jakarta Sans',sans-serif;">Mercedes-Benz</span>
+                    <span class="text-danger fw-bold fs-5 text-nowrap" style="font-family:'Plus Jakarta Sans',sans-serif;">Skoda</span>
                 </div>
             </marquee>
-
         </div>
     </section>
 
     <!-- ============================================================
-    6 CARDS – FEATURES
+    6 CARDS – FEATURES (Services highlights)
     ============================================================ -->
-    <div class="container-fluid" style="background: linear-gradient(135deg, #0c2340, #1a5276);">
+    <div id="services" class="container-fluid" style="background: linear-gradient(135deg, #0c2340, #1a5276);">
         <div class="row py-5">
             <!-- Card 1 – Since 2007 -->
             <div class="col-6 col-lg-2 mb-4">
@@ -314,7 +406,7 @@
         </div>
     </div>
 
-    <!-- ====== CTA SECTION – "Is Your Car AC Giving You Trouble?" ====== -->
+    <!-- ====== CTA SECTION ====== -->
     <section class="py-5" style="background: linear-gradient(135deg, #0c2340, #1a5276);">
         <div class="container">
             <div class="row justify-content-center">
@@ -325,18 +417,20 @@
                     <h6 class="text-white fw-bold mb-3 "><i class="fas fa-snowflake text-warning me-2"></i> AC Not Cooling? Talk to Our Technician</h6>
                     <p class="text-white-50 mb-4" style="font-size: 1.1rem;">Get a clear explanation of the cooling fault before any repair work starts.</p>
                     <div class="d-flex flex-wrap justify-content-center align-items-center gap-3">
-                        <a href="#" class="btn btn-warning btn-lg px-5 py-2 fw-semibold rounded-pill shadow"><i class="fas fa-headset me-2"></i> Talk to Technician</a>
-                        <a href="#" class="btn btn-outline-light btn-lg px-5 py-2 fw-semibold rounded-pill" style="border-width: 2px;"><i class="fas fa-calendar-check me-2"></i> Book Inspection</a>
+                        <!-- "Talk to Technician" → WhatsApp (quick chat) -->
+                        <a href="https://wa.me/+919821935286?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" rel="noopener noreferrer" class="btn btn-warning btn-lg px-5 py-2 fw-semibold rounded-pill shadow"><i class="fas fa-headset me-2"></i> Talk to Technician</a>
+                        <!-- "Book Inspection" → scrolls to contact form -->
+                        <a href="#contact" class="btn btn-outline-light btn-lg px-5 py-2 fw-semibold rounded-pill" style="border-width: 2px;"><i class="fas fa-calendar-check me-2"></i> Book Inspection</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- =============================================
-    COMPREHENSIVE WORKSHOP SOLUTIONS SECTION
-    ============================================= -->
-    <section class="workshop-section py-5 py-md-8" style="background: #0b1a2e; padding: 80px 0;">
+    <!-- ============================================================
+    SERVICES – WORKSHOP SOLUTIONS
+    ============================================================ -->
+    <section id="services-workshop" class="workshop-section py-5 py-md-8" style="background: #0b1a2e; padding: 80px 0;">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8 text-center">
@@ -350,13 +444,12 @@
         </div>
     </section>
 
-    <!-- =============================================
-    WHY CHOOSE WESTON COOL CARE - LEFT ALIGNED CARDS
-    ============================================= -->
-    <section class="py-5 py-md-8" style="background: rgb(10, 18, 30 );">
+    <!-- ============================================================
+    WHY CHOOSE WESTON COOL CARE
+    ============================================================ -->
+    <section id="why-us" class="py-5 py-md-8" style="background: rgb(10, 18, 30 );">
         <div class="container">
 
-            <!-- Heading -->
             <div class="text-center mx-auto mb-5" style="max-width:48rem;">
                 <div class="d-inline-flex align-items-center gap-2 border border-info border-opacity-25 rounded-pill px-3 py-1 mb-3">
                     <i class="fas fa-star text-info small"></i>
@@ -366,10 +459,8 @@
                 <p class="text-secondary fs-6">Built on technical integrity, accurate diagnosis, and transparent communication since 2007.</p>
             </div>
 
-            <!-- Features List -->
             <div class="row g-4">
 
-                <!-- 1. ESTABLISHED IN 2007 / 18+ Years -->
                 <div class="col-md-6 col-lg-4">
                     <div class="d-flex align-items-start gap-3 p-4  h-100" style="border: 1px solid #0b2e298e;">
                         <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle" style="width: 52px; height: 52px; background: rgba(26, 107, 138, 0.10);">
@@ -382,7 +473,6 @@
                     </div>
                 </div>
 
-                <!-- 2. Car AC Specialists -->
                 <div class="col-md-6 col-lg-4">
                     <div class="d-flex align-items-start gap-3 p-4 rounded-4  h-100" style="border: 1px solid #0b2e298e;">
                         <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle" style="width: 52px; height: 52px; background: rgba(40, 167, 69, 0.10);">
@@ -395,7 +485,6 @@
                     </div>
                 </div>
 
-                <!-- 3. Experienced Technicians -->
                 <div class="col-md-6 col-lg-4">
                     <div class="d-flex align-items-start gap-3 p-4 rounded-4  h-100" style="border: 1px solid #0b2e298e;">
                         <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle" style="width: 52px; height: 52px; background: rgba(255, 193, 7, 0.10);">
@@ -408,7 +497,6 @@
                     </div>
                 </div>
 
-                <!-- 4. EFFICIENT DIAGNOSIS / Quick Turnaround -->
                 <div class="col-md-6 col-lg-4">
                     <div class="d-flex align-items-start gap-3 p-4 rounded-4  h-100" style="border: 1px solid #0b2e298e;">
                         <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle" style="width: 52px; height: 52px; background: rgba(23, 162, 184, 0.10);">
@@ -422,7 +510,6 @@
                     </div>
                 </div>
 
-                <!-- 5. Transparent Service -->
                 <div class="col-md-6 col-lg-4">
                     <div class="d-flex align-items-start gap-3 p-4 rounded-4  h-100" style="border: 1px solid #0b2e298e;">
                         <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle" style="width: 52px; height: 52px; background: rgba(111, 66, 193, 0.10);">
@@ -435,7 +522,6 @@
                     </div>
                 </div>
 
-                <!-- 6. HONEST EVALUATION / Pickup & Drop -->
                 <div class="col-md-6 col-lg-4">
                     <div class="d-flex align-items-start gap-3 p-4 rounded-4  h-100" style="border: 1px solid #0b2e298e;">
                         <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle" style="width: 52px; height: 52px; background: rgba(220, 53, 69, 0.10);">
@@ -448,19 +534,19 @@
                     </div>
                 </div>
 
-            </div><!-- /row -->
-        </div><!-- /container -->
+            </div>
+        </div>
     </section>
 
-    <!-- process section  -->
-    <section class="process-section">
-        <!-- glow orbs -->
+    <!-- ============================================================
+    PROCESS SECTION
+    ============================================================ -->
+    <section id="process" class="process-section">
         <div class="orb orb--top-right"></div>
         <div class="orb orb--bottom-left"></div>
 
         <div class="process-container" style="background:rgb(10, 18, 30);">
 
-            <!-- header -->
             <div class="process-header">
                 <div class="process-badge mt-5">
                     <i class="fas fa-route"></i>
@@ -474,10 +560,8 @@
                 </p>
             </div>
 
-            <!-- steps -->
             <div class="steps-grid">
 
-                <!-- step 01 -->
                 <div class="step-item box shadow-lg mx-3 p-3" style="border: 1px solid #0b2e298e;">
                     <div class="step-circle">
                         <span class="step-number">01</span>
@@ -488,7 +572,6 @@
                     </p>
                 </div>
 
-                <!-- step 02 -->
                 <div class="step-item box shadow-lg mx-3 p-3" style="border: 1px solid #0b2e298e;">
                     <div class="step-circle">
                         <span class="step-number">02</span>
@@ -499,7 +582,6 @@
                     </p>
                 </div>
 
-                <!-- step 03 -->
                 <div class="step-item box shadow-lg mx-3 p-3" style="border: 1px solid #0b2e298e;">
                     <div class="step-circle">
                         <span class="step-number">03</span>
@@ -510,7 +592,6 @@
                     </p>
                 </div>
 
-                <!-- step 04 -->
                 <div class="step-item box shadow-lg mx-3 p-3" style="border: 1px solid #0b2e298e;">
                     <div class="step-circle">
                         <span class="step-number">04</span>
@@ -523,19 +604,20 @@
 
             </div>
 
-            <!-- footer / CTA -->
             <div class="process-footer">
-                <a href="#" class="btn-primary">
+                <!-- Process "Book Your Car AC Inspection" → WhatsApp -->
+                <a href="https://wa.me/+919821935286?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" rel="noopener noreferrer" class="btn-primary">
                     Book Your Car AC Inspection
                     <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
 
         </div>
-        <!-- /process-container -->
-
     </section>
 
+    <!-- ============================================================
+    MULTI-BRAND COMPATIBILITY
+    ============================================================ -->
     <section class="py-5 position-relative overflow-hidden" style="background: rgb(10, 18, 30);">
         <div class="container-custom position-relative text-center">
             <h4 class=" fw-bold text-info mb-3">Multi-Brand Compatibility</h4>
@@ -567,7 +649,7 @@
                         <p class="text-light" style="font-size: 13px;">"My car AC was not cooling at all. These guys came to my doorstep in Sector 62, diagnosed the leak, fixed it and refilled gas — all within 2 hours. Amazing service!"</p>
                         <div class="d-flex align-items-center gap-3 mt-auto">
                             <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width:48px; height:48px;"><span class="text-light fw-bold fs-5">R</span></div>
-                            <div><div class="fw-semibold text-info">Rajesh Kumar</div><div class="text-light small">Honda City • Sector 62</div></div>
+                            <div><div class="fw-semibold text-info">Avdesh Kumar</div><div class="text-light small">Honda City • Sector 73</div></div>
                         </div>
                     </div>
                 </div>
@@ -577,7 +659,7 @@
                         <p class="text-light" style="font-size: 13px ;">"Very professional team. They explained the issue clearly before starting work. The compressor repair cost was much less than the dealership. Highly recommended!"</p>
                         <div class="d-flex align-items-center gap-3 mt-auto">
                             <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width:48px; height:48px;"><span class="text-light fw-bold fs-5">P</span></div>
-                            <div><div class="fw-semibold text-info">Priya Sharma</div><div class="text-light small">Hyundai i20 • Sector 137</div></div>
+                            <div><div class="fw-semibold text-info">Trilok Chaudhary</div><div class="text-light small">Surajpur Greater Noida</div></div>
                         </div>
                     </div>
                 </div>
@@ -587,7 +669,7 @@
                         <p class="text-light" style="font-size: 13px;">"I've been using their service for 3 years now for my Swift and Creta. Always on time, always reliable. The full AC servicing package is great value for money."</p>
                         <div class="d-flex align-items-center gap-3 mt-auto">
                             <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width:48px; height:48px;"><span class="text-light fw-bold fs-5">A</span></div>
-                            <div><div class="fw-semibold text-info">Amit Verma</div><div class="text-light small">Maruti Swift • Sector 15</div></div>
+                            <div><div class="fw-semibold text-info">Vijay Chauhan</div><div class="text-light small">Maruti Swift • Sector 34</div></div>
                         </div>
                     </div>
                 </div>
@@ -595,16 +677,220 @@
         </div>
     </section>
 
-    <!-- google listing  -->
+
+    <!-- gallery-section  -->
+<section id="gallery" class="pt-3" style="background: rgb(10, 18, 30); overflow: hidden;">
+    <div class="container">
+
+        <!-- Gallery Heading -->
+        <div class="text-center mb-5">
+           <h1 class="text-light text-center">Gallery</h1>
+            
+        </div>
+
+        <!-- Image Gallery Grid -->
+        <div class="row g-4 justify-content-center">
+            <!-- Image 1 -->
+            <div class="col-6 col-md-4 col-lg-4">
+                <div class="gallery-item">
+                    <img src="/assets/images/ac_diagnose.png" alt="Car AC Service 1" class="img-fluid gallery-img" />
+                    <div class="gallery-overlay">
+                        <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
+                        <span class="overlay-text">AC Diagnosis</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Image 2 -->
+            <div class="col-6 col-md-4 col-lg-4">
+                <div class="gallery-item">
+                    <img src="/assets/images/gas_filling.png" alt="Car AC Service 2" class="img-fluid gallery-img" />
+                    <div class="gallery-overlay">
+                        <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
+                        <span class="overlay-text">Gas filling</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Image 3 -->
+            <div class="col-6 col-md-4 col-lg-4">
+                <div class="gallery-item">
+                    <img src="/assets/images/compressor_repair.png" alt="Car AC Service 3" class="img-fluid gallery-img" />
+                    <div class="gallery-overlay">
+                        <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
+                        <span class="overlay-text">Compressor Repair</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Image 4 -->
+            <div class="col-6 col-md-4 col-lg-4">
+                <div class="gallery-item">
+                    <img src="/assets/images/Leak_image.jfif" alt="Car AC Service 4" class="img-fluid gallery-img" />
+                    <div class="gallery-overlay">
+                        <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
+                        <span class="overlay-text">Leak Detection</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Image 5 -->
+            <div class="col-6 col-md-4 col-lg-4">
+                <div class="gallery-item">
+                    <img src="/assets/images/cooling_coil_image.webp" alt="Car AC Service 5" class="img-fluid gallery-img" />
+                    <div class="gallery-overlay">
+                        <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
+                        <span class="overlay-text">Cooling Coil Cleaning</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Image 6 -->
+            <div class="col-6 col-md-4 col-lg-4">
+                <div class="gallery-item">
+                    <img src="/assets/images/ac_service_image.png" alt="Car AC Service 6" class="img-fluid gallery-img" />
+                    <div class="gallery-overlay">
+                        <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
+                        <span class="overlay-text">Full AC Service</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<style>
+    /* ===== GALLERY ITEM STYLES ===== */
+    .gallery-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                    box-shadow 0.4s ease;
+        cursor: pointer;
+        aspect-ratio: 1 / 1;
+        border: 2px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .gallery-item:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 50px rgba(0, 180, 216, 0.25);
+        border-color: rgba(0, 180, 216, 0.5);
+    }
+
+    .gallery-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .gallery-item:hover .gallery-img {
+        transform: scale(1.12);
+    }
+
+    /* ===== OVERLAY ===== */
+    .gallery-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(10, 18, 30, 0.85), rgba(0, 180, 216, 0.55));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        padding: 16px;
+        text-align: center;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+    }
+
+    .overlay-icon {
+        font-size: 2.2rem;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(6px);
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .gallery-item:hover .overlay-icon {
+        transform: scale(1.1) rotate(-4deg);
+        background: rgba(0, 180, 216, 0.5);
+    }
+
+    .overlay-text {
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.95rem;
+        letter-spacing: 0.5px;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+    }
+
+    .gallery-item:hover .overlay-text {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* ===== STAGGER ANIMATION ON LOAD ===== */
+    .gallery-item {
+        opacity: 0;
+        animation: galleryFadeIn 0.7s ease forwards;
+    }
+
+    .gallery-item:nth-child(1) { animation-delay: 0.05s; }
+    .gallery-item:nth-child(2) { animation-delay: 0.10s; }
+    .gallery-item:nth-child(3) { animation-delay: 0.15s; }
+    .gallery-item:nth-child(4) { animation-delay: 0.20s; }
+    .gallery-item:nth-child(5) { animation-delay: 0.25s; }
+    .gallery-item:nth-child(6) { animation-delay: 0.30s; }
+
+    @keyframes galleryFadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* ===== RESPONSIVE TWEAKS ===== */
+    @media (max-width: 576px) {
+        .overlay-text {
+            font-size: 0.75rem;
+        }
+        .overlay-icon {
+            width: 42px;
+            height: 42px;
+            font-size: 1.6rem;
+        }
+        .gallery-item {
+            border-radius: 12px;
+        }
+    }
+</style>
+
+    <!-- gallery section close  -->
     <!-- ============================================================
-    CTA BANNER
+    GOOGLE LISTING / CTA BANNER
     ============================================================ -->
     <section class="py-5 position-relative overflow-hidden" style="background:rgb(10, 13, 20)">
-        <!-- Background Pattern -->
         <div class="position-absolute top-0 start-0 w-100 h-100" style="background-image:url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE0djJoLTJ2LTJoMnptMCAyaC0ydjJoMnYtMnptLTIgMmgtMnYyaDJ2LTJ6bS0yIDJoLTJ2Mmgydi0yem0tMiAySDE0djJoMnYtMnptLTIgMmgtMnYyaDJ2LTJ6Ii8+PC9nPjwvZz48L3N2Zz4='); opacity:0.3;"></div>
 
         <div class="container-custom position-relative">
-            <!-- Heading -->
             <div class="text-center mb-4">
                 <h5 class="fw-bold text-info mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;">
                     <i class="fab fa-google me-2 text-warning"></i>Live Google Business Profile Listing
@@ -614,25 +900,20 @@
                 </p>
             </div>
 
-            <!-- Verified Signals - List Style -->
             <div class="mb-4" style="max-width:600px; margin-left:auto; margin-right:auto; border:1px solid rgba(255,255,255,0.2); padding:20px; border-radius:10px;">
                 <div class="d-flex flex-column gap-2">
-                    <!-- Item 1 -->
                     <div class="d-flex align-items-center gap-3 text-white" style="font-size:11px;">
                         <i class="fas fa-star text-warning fs-6" style="width:14px;"></i>
                         <span><span class="fw-bold">5.0 ★</span> <span class="text-white">Star Rating on Google Business Profile</span></span>
                     </div>
-                    <!-- Item 2 -->
                     <div class="d-flex align-items-center gap-3 text-white" style="font-size:11px;">
                         <i class="fas fa-check-circle text-success fs-6" style="width:14px;"></i>
                         <span><span class="fw-bold">53+</span> <span class="text-white">Verified Google Customer Reviews</span></span>
                     </div>
-                    <!-- Item 3 -->
                     <div class="d-flex align-items-center gap-3 text-white" style="font-size:11px;">
                         <i class="fas fa-chart-line text-info fs-6" style="width:14px;"></i>
                         <span><span class="fw-bold">4.9 ★</span> <span class="text-white">Average across 233+ automobile directory reviews</span></span>
                     </div>
-                    <!-- Item 4 -->
                     <div class="d-flex align-items-center gap-3 text-white" style="font-size:11px;">
                         <i class="fas fa-map-marker-alt text-danger fs-6" style="width:14px;"></i>
                         <span><span class="text-white">Location: Shop No. 7, Main Road Mamura, Sector 66 Noida</span></span>
@@ -640,19 +921,19 @@
                 </div>
             </div>
 
-            <!-- Buttons -->
             <div class="d-flex flex-wrap justify-content-center gap-3">
-                <a href="tel:+919876543210" class="btn btn-light text-light px-4 py-3 rounded-3 fw-bold d-flex align-items-center gap-2" style="font-size:13px; border:2px solid #0c2340; background:linear-gradient(135deg, #00b4d8, #7b61ff);">
+                <a href="https://www.google.com/search?sca_esv=47b78e981711e3f9&hl=en-GB&gl=in&output=search&kgmid=/g/11y_yjjs0p&q=Weston+cool+care+car+AC+service+greater+noida+west&shndl=30&source=sh/x/loc/act/m1/4&kgs=0c3e14932fb27fcd&shem=shrtsdl&utm_source=shrtsdl,sh/x/loc/act/m1/4#ebo=0" class="btn btn-light text-light px-4 py-3 rounded-3 fw-bold d-flex align-items-center gap-2" style="font-size:13px; border:2px solid #0c2340; background:linear-gradient(135deg, #00b4d8, #7b61ff);">
                     <i class="fab fa-google me-1 text-warning"></i> Read All 53+ Reviews On Google Maps
                 </a>
-                <a href="#contact" class="btn btn-outline-light border-2 px-4 py-3 rounded-3 fw-bold d-flex align-items-center gap-2" style="font-size:13px; border-color:rgba(255,255,255,0.3);">
+                <a href="https://www.google.com/search?sca_esv=47b78e981711e3f9&hl=en-GB&gl=in&output=search&kgmid=/g/11y_yjjs0p&q=Weston+cool+care+car+AC+service+greater+noida+west&shndl=30&source=sh/x/loc/act/m1/4&kgs=0c3e14932fb27fcd&shem=shrtsdl&utm_source=shrtsdl,sh/x/loc/act/m1/4#ebo=0" class="btn btn-outline-light border-2 px-4 py-3 rounded-3 fw-bold d-flex align-items-center gap-2" style="font-size:13px; border-color:rgba(255,255,255,0.3);">
                     <i class="fab fa-google me-1" style="color:#4285F4;"></i> Leave a Review on Google
                 </a>
             </div>
         </div>
     </section>
+
     <!-- ============================================================
-    FAQ (Bootstrap Accordion)
+    FAQ
     ============================================================ -->
     <section id="faq" class="py-5 py-md-8" style="background: rgb(10, 13, 20);">
         <div class="container-custom" style="max-width:35rem; border: 1px solid #0b2e298e; padding: 30px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
@@ -665,7 +946,6 @@
             </div>
 
             <div class="accordion" id="faqAccordion">
-                <!-- Item 1 -->
                 <div class="accordion-item border-0 mb-2 bg-primary">
                     <h6 class="accordion-header">
                         <button class="accordion-button fw-semibold text-light border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="background: linear-gradient(135deg, #0c2340, #1a5276); font-size: 13px;">
@@ -678,7 +958,6 @@
                     </div>
                 </div>
 
-                <!-- Item 2 -->
                 <div class="accordion-item border-0 mb-2 bg-primary">
                     <h6 class="accordion-header">
                         <button class="accordion-button fw-semibold text-light border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="background: linear-gradient(135deg, #0c2340, #1a5276); font-size: 13px;">
@@ -691,7 +970,6 @@
                     </div>
                 </div>
 
-                <!-- Item 3 -->
                 <div class="accordion-item border-0 mb-2 bg-primary">
                     <h6 class="accordion-header">
                         <button class="accordion-button fw-semibold text-light border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="background: linear-gradient(135deg, #0c2340, #1a5276); font-size: 13px;">
@@ -704,7 +982,6 @@
                     </div>
                 </div>
 
-                <!-- Item 4 -->
                 <div class="accordion-item border-0 mb-2 bg-primary">
                     <h6 class="accordion-header">
                         <button class="accordion-button fw-semibold text-light border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" style="background: linear-gradient(135deg, #0c2340, #1a5276); font-size: 13px;">
@@ -717,7 +994,6 @@
                     </div>
                 </div>
 
-                <!-- Item 5 -->
                 <div class="accordion-item border-0 mb-2 bg-primary">
                     <h6 class="accordion-header">
                         <button class="accordion-button fw-semibold text-light border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" style="background: linear-gradient(135deg, #0c2340, #1a5276); font-size: 13px;">
@@ -730,7 +1006,6 @@
                     </div>
                 </div>
 
-                <!-- Item 6 -->
                 <div class="accordion-item border-0 mb-2 bg-primary">
                     <h6 class="accordion-header">
                         <button class="accordion-button fw-semibold text-light border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" style="background: linear-gradient(135deg, #0c2340, #1a5276); font-size: 12px;">
@@ -746,45 +1021,38 @@
         </div>
     </section>
 
-
+    <!-- ============================================================
+    WORKSHOP LOCATION & MAP
+    ============================================================ -->
     <section class="py-5 position-relative overflow-hidden" style="background:rgb(10, 13, 20)">
-        <!-- Background Pattern -->
         <div class="position-absolute top-0 start-0 w-100 h-100" style="background-image:url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE0djJoLTJ2LTJoMnptMCAyaC0ydjJoMnYtMnptLTIgMmgtMnYyaDJ2LTJ6bS0yIDJoLTJ2Mmgydi0yem0tMiAySDE0djJoMnYtMnptLTIgMmgtMnYyaDJ2LTJ6Ii8+PC9nPjwvZz48L3N2Zz4='); opacity:0.3;"></div>
 
         <div class="container-custom position-relative">
-            <!-- Heading -->
             <div class="text-center mb-4">
                 <div class="d-inline-flex align-items-center gap-2 bg-brand-50 border border-brand-100 rounded-pill px-3 py-1 mb-3">
                     <i class="fas fa-quote-left text-info small"></i>
-                    <span class="text-info small fw-semibold">Workshop Location & Directions
+                    <span class="text-info small fw-semibold">Workshop Location &amp; Directions
                     </span>
                 </div>
                 <p class="text-white fw-bold fs-4 mx-auto" style="max-width:70%;">
-                    Visit Weston Cool Care in Noida
+                    Visit Weston Cool Care in Greater Noida
                 </p>
                 <p class="text-white-50 fs-6 mx-auto" style="max-width:70%;">
-                    Conveniently situated on Main Road Mamura, directly opposite Phase-3 Police Station in Sector 66, Noida.
+                    Plot 286, Sector 16B, west Greater Noida, Uttar Pradesh 201310, India
                 </p>
             </div>
 
             <div class="row g-4">
-                <!-- Left Column: Address & Working Hours -->
                 <div class="col-lg-6">
                     <div class=" bg-opacity-5 rounded-4 p-4 h-100 border border-white border-opacity-10">
-                        <!-- Workshop Address -->
                         <h6 class="text-info fw-bold mb-3" style="font-size:13px; letter-spacing:0.5px;">
                             <i class="fas fa-map-pin me-2"></i>WORKSHOP ADDRESS
                         </h6>
                         <p class="text-white mb-1" style="font-size:12px; line-height:1.6;">
-                            Shop No. 7, Main Road Mamura, Sector 66, opposite Thana Phase-3, Noida, Uttar Pradesh 201301
-                        </p>
-                        <p class="text-white-50 small mb-3">
-                            <i class="fas fa-tag me-1 text-warning"></i>Landmark: Opposite Phase-3 Police Station (Thana Phase-3)
-                        </p>
+                            Plot 286, Sector 16B, west Greater Noida, Uttar Pradesh 201310, India                        </p>
 
                         <hr class="border-white border-opacity-10">
 
-                        <!-- Working Hours -->
                         <h6 class="text-info fw-bold mb-3" style="font-size:11px; letter-spacing:0.5px;">
                             <i class="far fa-clock me-2"></i>WORKING HOURS
                         </h6>
@@ -792,12 +1060,11 @@
                             <span class="text-success fw-semibold">Monday – Sunday</span> <span class="text-white-50">(All 7 Days)</span>
                         </p>
                         <p class="text-white mb-3" style="font-size:12px;">
-                            <i class="far fa-clock text-info me-1"></i>9:00 AM – 9:00 PM
+                            <i class="far fa-clock text-info me-1"></i>9:00 AM – 11:00 PM
                         </p>
 
                         <hr class="border-white border-opacity-10">
 
-                        <!-- Local Noida Service Areas -->
                         <h6 class="text-info fw-bold mb-3" style="font-size:11px; letter-spacing:0.5px;">
                             <i class="fas fa-city me-2"></i>LOCAL NOIDA SERVICE AREAS
                         </h6>
@@ -815,50 +1082,31 @@
 
                         <hr class="border-white border-opacity-10">
 
-                        <!-- Buttons -->
                         <div class="d-flex flex-wrap gap-2 mt-3">
                             <a href="#" class="btn px-2 py-2 rounded-3 fw-bold d-flex align-items-center gap-2" style="font-size:11px; background:linear-gradient(135deg, #00b4d8, #7b61ff); border:none; color:#fff;">
                                 <i class="fas fa-map-location-dot"></i> Get Directions
                             </a>
-                            <a href="tel:+919876543210" class="btn btn-outline-light border-2 px-3 py-2 rounded-3 fw-bold d-flex align-items-center gap-2 btn-hover-yellow" style="font-size:11px; border-color:rgba(255,255,255,0.25); color:#fff;">
+                            <a href="tel:+91 9821935286" class="btn btn-outline-light border-2 px-3 py-2 rounded-3 fw-bold d-flex align-items-center gap-2 btn-hover-yellow" style="font-size:11px; border-color:rgba(255,255,255,0.25); color:#fff;">
                                 <i class="fas fa-phone text-success"></i> Call Now
                             </a>
-                            <a href="#" class="btn btn-outline-light border-2 px-3 py-2 rounded-3 fw-bold d-flex align-items-center gap-2 btn-hover-yellow" style="font-size:11px; border-color:rgba(255,255,255,0.25); color:#fff;">
+                            <a href="https://wa.me/+91 9821935286" class="btn btn-outline-light border-2 px-3 py-2 rounded-3 fw-bold d-flex align-items-center gap-2 btn-hover-yellow" style="font-size:11px; border-color:rgba(255,255,255,0.25); color:#fff;">
                                 <i class="fab fa-whatsapp text-success"></i> WhatsApp
                             </a>
-
                         </div>
                     </div>
                 </div>
-                <style>
-                    .btn-outline-light:hover {
-                        background: #ffc107 !important;
-                        /* yellow */
-                        color: #212529 !important;
-                        /* dark */
-                        border-color: #ffc107 !important;
-                    }
-                </style>
 
-                <!-- Right Column: Google Map -->
                 <div class="col-lg-6">
                     <div class=" bg-opacity-5 rounded-4 overflow-hidden border border-white border-opacity-10 h-100 d-flex align-items-center">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.0!2d77.32!3d28.58!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDM0JzQ4LjAiTiA3N8KwMTknMTIuMCJF!5e0!3m2!1sen!2sin!4v1234567890" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" class="grayscale hover:grayscale-0 transition-all duration-500"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1842518.2401155645!2d76.99756095693081!3d28.802476695815148!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1788844939876!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-
-
-
-
-
-
-
     <!-- ============================================================
-    CONTACT
+    CONTACT – with WhatsApp button added
     ============================================================ -->
     <section id="contact" class="py-5 py-md-8 bg-dark-50 position-relative overflow-hidden" style="background: rgb(10, 13, 20)">
         <div class="position-absolute top-0 start-0 w-25 h-25 bg-brand-100/30 rounded-circle" style="filter:blur(80px);"></div>
@@ -870,68 +1118,68 @@
                 </div>
                 <h4 class="display-4 fw-bold text-white mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;">Book Your <span class="gradient-text">Service Today</span></h4>
                 <p class="text-white fs-6">Fill the form below or reach us directly. We'll get back to you within 30 minutes.</p>
+                <!-- WhatsApp Contact Button inside contact section -->
+                <div class="mt-3">
+                    <a href="https://wa.me/+919821935286?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" rel="noopener noreferrer" class="whatsapp-contact-btn">
+                        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                    </a>
+                </div>
             </div>
 
-            <!-- MAIN ROW - EQUAL HEIGHT -->
             <div class="row g-4 align-items-stretch">
 
-                <!-- Contact Info Column -->
                 <div class="col-lg-5 d-flex">
                     <div class="d-flex flex-column gap-3 w-100">
-                        <!-- Card 1 -->
                         <div class="p-4 r border border-dark-100 shadow-sm d-flex align-items-start gap-3">
                             <div class="bg-brand-50 rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:48px; height:48px;">
                                 <i class="fas fa-map-marker-alt text-info fs-5"></i>
                             </div>
                             <div>
                                 <h6 class="fw-semibold text-white">Our Location</h6>
-                                <p class="text-white-50 small mb-0">Shop No. 12, Sector 18 Market, Near Atta Market, Noida, UP - 201301</p>
+                                <p class="text-white-50 small mb-0">Plot 286, Sector 16B, west Greater Noida, Uttar Pradesh 201310, India</p>
                             </div>
                         </div>
-                        <!-- Card 2 -->
                         <div class="p-4  border border-dark-100 shadow-sm d-flex align-items-start gap-3" style="background: rgba(255,255,255,0.03);">
                             <div class="bg-green-50 rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:48px; height:48px;">
                                 <i class="fas fa-phone-alt text-danger fs-5"></i>
                             </div>
                             <div>
                                 <h6 class="fw-semibold text-white">Phone Number</h6>
-                                <p class="text-white-50 small mb-0">+91 98765 43210<br />+91 98765 43211</p>
+                                <p class="text-white-50 small mb-0">0 9821935286<br />0 9821935286</p>
                             </div>
                         </div>
-                        <!-- Card 3 -->
                         <div class="p-4 border  shadow-sm d-flex align-items-start gap-3" style="background: rgba(255,255,255,0.03);">
                             <div class="bg-amber-50 rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:48px; height:48px;">
                                 <i class="fas fa-envelope text-success fs-5"></i>
                             </div>
                             <div>
                                 <h6 class="fw-semibold text-white">Email Address</h6>
-                                <p class="text-white-50 small mb-0">info@noidacaracrepair.com<br />booking@noidacaracrepair.com</p>
+                                <p class="text-white-50 small mb-0">westoncoolcare2@gmail.com<br />westoncoolcare2@gmail.com</p>
                             </div>
                         </div>
-                        <!-- Card 4 -->
                         <div class="p-4  border border-dark-100 shadow-sm d-flex align-items-start gap-3" style="background: rgba(255,255,255,0.03);">
                             <div class="bg-purple-50 rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:48px; height:48px;">
                                 <i class="fas fa-clock text-info fs-5"></i>
                             </div>
                             <div>
                                 <h6 class="fw-semibold text-white">Working Hours</h6>
-                                <p class="text-white-50 small mb-0">Mon - Sat: 8:00 AM - 9:00 PM<br />Sunday: 9:00 AM - 6:00 PM<br /><span class="text-success fw-medium">Emergency: 24/7 Available</span></p>
+                                <p class="text-white-50 small mb-0">Mon - Sun: 8:00 AM - 9:00 PM<br />27 / 7 Facility available<br /><span class="text-success fw-medium">Emergency: 24/7 Available</span></p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Form Column -->
                 <div class="col-lg-7 d-flex">
+                    <!-- ===== CONTACT FORM – with data console + WhatsApp redirect ===== -->
                     <form id="contactForm" class=" p-4 shadow-sm w-100" style="border-radius: 10px; border: 1px solid rgba(255,255,255,0.06);">
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-white">Full Name *</label>
-                                <input type="text" name="name" required class="form-control   text-white border-1px solid dark" placeholder="Enter your name" />
+                                <input type="text" name="name" required class="form-control   text-info border-1px solid dark" placeholder="Enter your name" />
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-white">Phone Number *</label>
-                                <input type="tel" name="phone" required class="form-control text-white border-1px solid dark" placeholder="+91 XXXXX XXXXX" />
+                                <input type="tel" name="phone" required class="form-control text-info border-1px solid dark" placeholder="+91 XXXXX XXXXX" />
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-white">Car Brand *</label>
@@ -954,7 +1202,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-white">Car Model</label>
-                                <input type="text" name="carModel" class="form-control  text-white border-1px solid dark" placeholder="e.g., Swift, Creta, City" />
+                                <input type="text" name="carModel" class="form-control  text-info border-1px solid dark" placeholder="e.g., Swift, Creta, City" />
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-white">Service Required *</label>
@@ -975,11 +1223,11 @@
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-bold text-white  ">Your Location in Noida</label>
-                                <input type="text" name="location" class="form-control text-white border-1px solid dark " placeholder="e.g., Sector 62, Sector 137, etc." />
+                                <input type="text" name="location" class="form-control text-info border-1px solid dark " placeholder="e.g., Sector 62, Sector 137, etc." />
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-bold text-white">Describe the Issue</label>
-                                <textarea name="message" rows="3" class="form-control text-white border-1px solid dark" placeholder="Tell us about the problem you're facing with your car AC..."></textarea>
+                                <textarea name="message" rows="3" class="form-control  text-info border-1px solid dark" placeholder="Tell us about the problem you're facing with your car AC..."></textarea>
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary-custom w-100 py-3 rounded-3 fw-semibold d-flex align-items-center justify-content-center gap-2" style="background: linear-gradient(135deg, #1a6b8a, #3ba6c9); color: #fff; border: none; border-radius: 50px; font-size: 1.1rem; box-shadow: 0 8px 30px rgba(26,107,138,0.4);">
@@ -994,8 +1242,10 @@
         </div>
     </section>
 
-
-    <section class="about-section" style="background: #0b1a2e;">
+    <!-- ============================================================
+    ABOUT SECTION
+    ============================================================ -->
+    <section id="about" class="about-section" style="background: #0b1a2e;">
         <div class="container">
             <div class="row pb-5">
                 <div class="col-md-6">
@@ -1004,10 +1254,8 @@
                     </h5>
                     <h3 class="text-white">Car AC Specialists Serving Noida Since 2007</h3>
                     <p class="text-white">Weston Cool Care is a Noida-based automobile service center established in 2007, with dedicated focus on car AC repair, diagnostics, and automobile service. Operating on Main Road Mamura (opposite Thana Phase-3, Sector 66), we have spent over 18 years refining our diagnostic precision and thermal cooling craftsmanship.</p>
-                    <!-- === 4 CARDS (2x2 Grid) === -->
                     <div class="row g-3 mt-2">
 
-                        <!-- Card 1 : AC Repair -->
                         <div class="col-6">
                             <div class="service-card-sm">
                                 <div class="d-flex align-items-center gap-2 mb-2">
@@ -1019,7 +1267,6 @@
                                 <div class="card-text-sm text-white-50">18+ years hands-on automotive repair experience across multiple generations of vehicle AC systems.</div>
                             </div>
                         </div>
-                        <!-- Card 2 : Technical Expertise -->
                         <div class="col-6">
                             <div class="service-card-sm">
                                 <div class="d-flex align-items-center gap-2 mb-2">
@@ -1031,7 +1278,6 @@
                                 <div class="card-text-sm text-white-50">Thorough pressure line evaluation and root-cause identification before replacing any parts.</div>
                             </div>
                         </div>
-                        <!-- Card 3 : Transparent Communication -->
                         <div class="col-6">
                             <div class="service-card-sm">
                                 <div class="d-flex align-items-center gap-2 mb-2">
@@ -1043,7 +1289,6 @@
                                 <div class="card-text-sm text-white-50">Thorough pressure line evaluation and root-cause identification before replacing any parts.</div>
                             </div>
                         </div>
-                        <!-- Card 4 : Thermal Cooling -->
                         <div class="col-6">
                             <div class="service-card-sm">
                                 <div class="d-flex align-items-center gap-2 mb-2">
@@ -1060,7 +1305,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div class="rounded-4 shadow-sm w-100" style="background-image: url('https://images.unsplash.com/photo-1615906655593-ad0386982a0f?crop=entropy&cs=srgb&fm=jpg&q=85'); background-size: cover; background-position: center; height: 100%; min-height: 300px;">
+                    <div class="rounded-4 shadow-sm w-100" style="background-image: url('/assets/images/gasimage_2.png'); background-size: cover; background-position: center; height: 100%; min-height: 300px;">
                     </div>
                 </div>
             </div>
@@ -1075,23 +1320,27 @@
             <div class="row g-4 pb-4 border-bottom border-white-10">
                 <div class="col-sm-6 col-lg-3">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <div class="d-flex align-items-center justify-content-center rounded-3" style="width:40px; height:40px; background:linear-gradient(135deg,#6366f1,#4338ca);"><i class="fas fa-snowflake text-white"></i></div>
+                        <div class="d-flex align-items-center justify-content-center rounded-3" style="width:40px; height:40px; background:linear-gradient(135deg,#6366f1,#4338ca);"><span class="text-white fw-bold">wcc</span></div>
                         <div><span class="text-white fw-bold d-block" style="font-family:'Plus Jakarta Sans',sans-serif;">Noida Car AC</span><span class="text-white small text-uppercase" style="letter-spacing:0.1em;">Repair &amp; Service</span></div>
                     </div>
                     <p class="text-warning small" style="font-size: 11px;">Your trusted partner for all car AC repair and maintenance needs in Noida and Greater Noida since 2012.</p>
                     <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-sm bg-success rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fab fa-facebook-f text-white"></i></a>
-                        <a href="#" class="btn btn-sm bg-success rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fab fa-instagram text-white"></i></a>
-                        <a href="#" class="btn btn-sm bg-success rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fab fa-youtube text-white"></i></a>
-                        <a href="#" class="btn btn-sm bg-success rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fab fa-whatsapp text-white"></i></a>
+                        <a href="https://www.facebook.com/share/1KnuEGLxEi/" class="btn btn-sm bg-success rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fab fa-facebook-f text-white"></i></a>
+                        <a href="https://www.instagram.com/maruf52615?stkn=MXFneDlsb3RkdTU5dQ==" class="btn btn-sm bg-success rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fab fa-instagram text-white"></i></a>
+                        <a href="https://youtube.com/@marufkhan6919?si=CyoEudWiSnOs01sZ" class="btn btn-sm bg-success rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fab fa-youtube text-white"></i></a>
+                        <a href="https://wa.me/+919821935286" class="btn btn-sm bg-success rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fab fa-whatsapp text-white"></i></a>
                     </div>
                 </div>
                 <div class="col-sm-6 col-lg-3">
                     <h6 class="text-white fw-semibold">Our Services</h6>
                     <ul class="list-unstyled small">
+                        <li><a href="#services" class="text-white-50 text-decoration-none d-flex align-items-center gap-1"><i class="fas fa-chevron-right text-dark-600" style="font-size:0.2rem;"></i>AC Gas filling 6 - month warenty</a></li>
+                        <li><a href="#services" class="text-white-50 text-decoration-none d-flex align-items-center gap-1"><i class="fas fa-chevron-right text-dark-600" style="font-size:0.2rem;"></i>Cooling Coil 1 - year warenty </a></li>
+                        <li><a href="#services" class="text-white-50 text-decoration-none d-flex align-items-center gap-1"><i class="fas fa-chevron-right text-dark-600" style="font-size:0.2rem;"></i>AC Gas filling through computerized</a></li>
+                        <li><a href="#services" class="text-white-50 text-decoration-none d-flex align-items-center gap-1"><i class="fas fa-chevron-right text-dark-600" style="font-size:0.2rem;"></i>Ac Compressor 1 - Year warenty</a></li>
                         <li><a href="#services" class="text-white-50 text-decoration-none d-flex align-items-center gap-1"><i class="fas fa-chevron-right text-dark-600" style="font-size:0.2rem;"></i>AC Gas Refilling</a></li>
-                        <li><a href="#services" class="text-white-50 text-decoration-none d-flex align-items-center gap-1"><i class="fas fa-chevron-right text-dark-600" style="font-size:0.2rem;"></i>Leak Detection</a></li>
-                        <li><a href="#services" class="text-white-50 text-decoration-none d-flex align-items-center gap-1"><i class="fas fa-chevron-right text-dark-600" style="font-size:0.2rem;"></i>Compressor Repair</a></li>
+                        <li><a href="#services" class="text-white-50 text-decoration-none d-flex align-items-center gap-1"><i class="fas fa-chevron-right text-dark-600" style="font-size:0.2rem;"></i>Car Ac Service</a></li>
+                        <li><a href="#services" class="text-white-50 text-decoration-none d-flex align-items-center gap-1"><i class="fas fa-chevron-right text-dark-600" style="font-size:0.2rem;"></i>Car Ac Password</a></li>
                         <li><a href="#services" class="text-white-50 text-decoration-none d-flex align-items-center gap-1"><i class="fas fa-chevron-right text-dark-600" style="font-size:0.2rem;"></i>Filter Replacement</a></li>
                         <li><a href="#services" class="text-white-50 text-decoration-none d-flex align-items-center gap-1"><i class="fas fa-chevron-right text-dark-600" style="font-size:0.2rem;"></i>Coil Cleaning</a></li>
                         <li><a href="#services" class="text-white-50 text-decoration-none d-flex align-items-center gap-1"><i class="fas fa-chevron-right text-dark-600" style="font-size:0.2rem;"></i>Full AC Service</a></li>
@@ -1111,9 +1360,9 @@
                 <div class="col-sm-6 col-lg-3">
                     <h6 class="text-white fw-semibold">Quick Contact</h6>
                     <div class="d-flex flex-column gap-2">
-                        <a href="tel:+919876543210" class="text-white-50 text-decoration-none d-flex align-items-center gap-2"><span class=" rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fas fa-phone-alt  text-danger"></i></span>+91 98765 43210</a>
-                        <a href="mailto:info@noidacaracrepair.com" class="text-white-50 text-decoration-none d-flex align-items-center gap-2"><span class=" rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fas fa-envelope text-success"></i></span>info@noidacaracrepair.com</a>
-                        <a href="https://wa.me/919876543210" class="text-white-50 text-decoration-none d-flex align-items-center gap-2"><span class=" rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fab fa-whatsapp text-success"></i></span>WhatsApp Chat</a>
+                        <a href="tel:+91 9821935286" class="text-white-50 text-decoration-none d-flex align-items-center gap-2"><span class=" rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fas fa-phone-alt  text-danger"></i></span>+91 9821935286</a>
+                        <a href="mailto:westoncoolcare2@gmail.com" class="text-white-50 text-decoration-none d-flex align-items-center gap-2"><span class=" rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fas fa-envelope text-success"></i></span>westoncoolcare2@gmail.com</a>
+                        <a href="https://wa.me/+91 9821935286" class="text-white-50 text-decoration-none d-flex align-items-center gap-2"><span class=" rounded-3 d-flex align-items-center justify-content-center" style="width:32px; height:32px; background:rgba(255,255,255,0.05);"><i class="fab fa-whatsapp text-success"></i></span>WhatsApp Chat</a>
                     </div>
                     <div class="mt-3">
                         <p class="text-warning small mb-2">Get tips &amp; offers:</p>
@@ -1136,17 +1385,15 @@
     </footer>
 
     <!-- ============================================================
-    FLOATING ACTION BUTTONS – WhatsApp Inquiry + Call
+    FLOATING ACTION BUTTONS
     ============================================================ -->
     <div class="position-fixed bottom-0 end-0 m-2 z-3 d-flex flex-column gap-2 align-items-end">
 
-        <!-- Call Button -->
-        <a href="tel:+919876543210" class="d-flex align-items-center justify-content-center rounded-circle text-decoration-none shadow-lg " style="width:40px; height:40px;background-color: crimson; box-shadow:0 8px 30px rgba(0,123,255,0.45); transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 12px 40px rgba(0,123,255,0.6)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 30px rgba(0,123,255,0.45)';">
+        <a href="tel:+91 9821935286" class="d-flex align-items-center justify-content-center rounded-circle text-decoration-none shadow-lg " style="width:40px; height:40px;background-color: crimson; box-shadow:0 8px 30px rgba(0,123,255,0.45); transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 12px 40px rgba(0,123,255,0.6)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 30px rgba(0,123,255,0.45)';">
             <i class="fas fa-phone text-white fs-2"></i>
         </a>
 
-        <!-- WhatsApp Inquiry Button -->
-        <a href="https://wa.me/919876543210?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" class="d-flex align-items-center justify-content-center rounded-circle text-decoration-none shadow-lg" style="width:35px; height:35px; background:#25D366; box-shadow:0 8px 30px rgba(37,211,102,0.45); transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 12px 40px rgba(37,211,102,0.6)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 30px rgba(37,211,102,0.45)';">
+        <a href="https://wa.me/+91 9821935286?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" class="d-flex align-items-center justify-content-center rounded-circle text-decoration-none shadow-lg" style="width:35px; height:35px; background:#25D366; box-shadow:0 8px 30px rgba(37,211,102,0.45); transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 12px 40px rgba(37,211,102,0.6)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 30px rgba(37,211,102,0.45)';">
             <i class="fab fa-whatsapp text-white" style="font-size:25px"></i>
         </a>
 
@@ -1160,12 +1407,222 @@
     </button>
 
     <!-- ============================================================
-    BOOTSTRAP JS
+    BOOTSTRAP JS + CUSTOM SCROLL & MENU LOGIC
     ============================================================ -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
     </script>
-    <script src="assets/js/main.js"></script>
 
+    <script>
+        // =============================================================
+        // 1) MOBILE MENU TOGGLE
+        // =============================================================
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileClose = document.getElementById('mobileClose');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function openMobileMenu() {
+            mobileMenu.classList.add('open');
+            mobileOverlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('open');
+            mobileOverlay.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        if (mobileToggle) mobileToggle.addEventListener('click', openMobileMenu);
+        if (mobileClose) mobileClose.addEventListener('click', closeMobileMenu);
+        if (mobileOverlay) mobileOverlay.addEventListener('click', closeMobileMenu);
+
+        // Close mobile menu when any mobile link is clicked (smooth scroll)
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                setTimeout(closeMobileMenu, 250);
+            });
+        });
+
+        // =============================================================
+        // 2) SMOOTH SCROLL for all anchor links (with offset for fixed nav)
+        // =============================================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    const navHeight = document.getElementById('navbar')?.offsetHeight || 80;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset -
+                        navHeight;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    history.pushState(null, null, targetId);
+                }
+            });
+        });
+
+        // =============================================================
+        // 3) NAVBAR BACKGROUND on scroll
+        // =============================================================
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 60) {
+                navbar.classList.add('bg-dark-900', 'shadow-lg');
+                navbar.style.background = 'rgba(10,14,30,0.94)';
+                navbar.style.backdropFilter = 'blur(16px)';
+                navbar.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+            } else {
+                navbar.classList.remove('bg-dark-900', 'shadow-lg');
+                navbar.style.background = 'transparent';
+                navbar.style.backdropFilter = 'none';
+                navbar.style.borderBottom = 'none';
+            }
+        });
+
+        // =============================================================
+        // 4) BACK TO TOP
+        // =============================================================
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 500) {
+                backToTop.style.opacity = '1';
+                backToTop.style.transform = 'translateY(0)';
+                backToTop.style.pointerEvents = 'auto';
+            } else {
+                backToTop.style.opacity = '0';
+                backToTop.style.transform = 'translateY(16px)';
+                backToTop.style.pointerEvents = 'none';
+            }
+        });
+        if (backToTop) {
+            backToTop.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // =============================================================
+        // 5) TOAST SYSTEM
+        // =============================================================
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast-custom ${type} d-flex align-items-center justify-content-between`;
+            toast.innerHTML = `
+                <span>${message}</span>
+                <button class="toast-close">&times;</button>
+            `;
+            container.appendChild(toast);
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(30px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 400);
+            }, 4500);
+        }
+
+        // =============================================================
+        // 6) CONTACT FORM HANDLING – console log + WhatsApp redirect
+        // =============================================================
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault(); // Prevent page reload
+
+                // Gather form data
+                const formData = new FormData(this);
+                const name = formData.get('name') || '';
+                const phone = formData.get('phone') || '';
+                const carBrand = formData.get('carBrand') || '';
+                const carModel = formData.get('carModel') || '';
+                const service = formData.get('service') || '';
+                const date = formData.get('date') || '';
+                const location = formData.get('location') || '';
+                const message = formData.get('message') || '';
+
+                // Build a readable message
+                const inquiryText = `Hi, I need car AC repair service in Noida.
+        Name: ${name}
+        Phone: ${phone}
+        Car Brand: ${carBrand}
+        Car Model: ${carModel}
+        Service Required: ${service}
+        Preferred Date: ${date}
+        Location: ${location}
+        Issue Description: ${message}`;
+
+                // Log to console (as requested)
+                console.log('📋 Form Data:', {
+                    name,
+                    phone,
+                    carBrand,
+                    carModel,
+                    service,
+                    date,
+                    location,
+                    message
+                });
+                console.log('📤 WhatsApp Message:', inquiryText);
+
+                // Encode for URL
+                const encodedMsg = encodeURIComponent(inquiryText);
+                const whatsappUrl = `https://wa.me/+919821935286?text=${encodedMsg}`;
+
+                // Open WhatsApp in new tab/window
+                window.open(whatsappUrl, '_blank');
+
+                // Show success toast
+                showToast(`✅ Thanks ${name || 'Guest'}! Your inquiry was sent via WhatsApp.`, 'success');
+
+                // Optionally reset the form
+                this.reset();
+            });
+        }
+
+        // =============================================================
+        // 7) NEWSLETTER SUBSCRIBE
+        // =============================================================
+        const subscribeBtn = document.getElementById('subscribeBtn');
+        const newsletterInput = document.getElementById('newsletterInput');
+        if (subscribeBtn && newsletterInput) {
+            subscribeBtn.addEventListener('click', function() {
+                const email = newsletterInput.value.trim();
+                if (email && email.includes('@')) {
+                    showToast('✅ Subscribed successfully!', 'success');
+                    newsletterInput.value = '';
+                } else {
+                    showToast('⚠️ Please enter a valid email address.', 'error');
+                }
+            });
+        }
+
+        // =============================================================
+        // 8) CLOSE BOOTSTRAP COLLAPSE ON DESKTOP LINK CLICK
+        // =============================================================
+        const navLinks = document.querySelectorAll('#navbarNav .nav-link');
+        const navbarCollapse = document.getElementById('navbarNav');
+        if (navbarCollapse) {
+            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 992 && bsCollapse) {
+                        bsCollapse.hide();
+                    }
+                });
+            });
+        }
+
+        console.log('✅ Weston Cool Care — Contact form sends data to console and WhatsApp!');
+    </script>
 
 </body>
 </html>

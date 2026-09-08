@@ -8,7 +8,9 @@
       {
         "ignore": [
           "backdrop-filter",
-          "aspect-ratio"
+          "aspect-ratio",
+          "scroll-margin-top",
+          "inset"
         ]
       }
     ],
@@ -38,7 +40,8 @@
       {
         "ignore": [
           "iframe[allowfullscreen]",
-          "iframe[loading]"
+          "iframe[loading]",
+          "iframe[referrerpolicy]"
         ]
       }
     ],
