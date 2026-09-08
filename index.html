@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
 
     <style>
         /* ===== FIX: ensure all sections have proper anchor offset ===== */
@@ -121,6 +121,129 @@
         .whatsapp-contact-btn i {
             font-size: 1.6rem;
         }
+
+        /* ===== gallery item styles (already present) ===== */
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        box-shadow 0.4s ease;
+            cursor: pointer;
+            aspect-ratio: 1 / 1;
+            border: 2px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 180, 216, 0.25);
+            border-color: rgba(0, 180, 216, 0.5);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.12);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(10, 18, 30, 0.85), rgba(0, 180, 216, 0.55));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .overlay-icon {
+            font-size: 2.2rem;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(6px);
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .gallery-item:hover .overlay-icon {
+            transform: scale(1.1) rotate(-4deg);
+            background: rgba(0, 180, 216, 0.5);
+        }
+
+        .overlay-text {
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+        }
+
+        .gallery-item:hover .overlay-text {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-item {
+            opacity: 0;
+            animation: galleryFadeIn 0.7s ease forwards;
+        }
+
+        .gallery-item:nth-child(1) { animation-delay: 0.05s; }
+        .gallery-item:nth-child(2) { animation-delay: 0.10s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.15s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.20s; }
+        .gallery-item:nth-child(5) { animation-delay: 0.25s; }
+        .gallery-item:nth-child(6) { animation-delay: 0.30s; }
+
+        @keyframes galleryFadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .overlay-text {
+                font-size: 0.75rem;
+            }
+            .overlay-icon {
+                width: 42px;
+                height: 42px;
+                font-size: 1.6rem;
+            }
+            .gallery-item {
+                border-radius: 12px;
+            }
+        }
     </style>
 
 </head>
@@ -130,7 +253,7 @@
     <div id="toastContainer"></div>
 
     <!-- ============================================================
-    NAVIGATION – "Book Service" now opens WhatsApp
+    NAVIGATION – "Book Service" scrolls to contact form
     ============================================================ -->
     <nav id="navbar" class="navbar navbar-expand-lg fixed-top bg-transparent py-0 transition-all duration-500" style="min-height: 5rem; z-index:1050;">
         <div class="container-custom d-flex align-items-center justify-content-between h-100 w-100">
@@ -148,8 +271,8 @@
 
             <!-- ===== RIGHT SIDE GROUP (Mobile/Tablet only) ===== -->
             <div class="d-flex d-lg-none align-items-center gap-2 gap-sm-3 flex-shrink-0">
-                <!-- Mobile Book Service → WhatsApp -->
-                <a href="https://wa.me/+919821935286?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" rel="noopener noreferrer" class="btn-book-only">
+                <!-- Mobile Book Service → scrolls to contact form -->
+                <a href="#contact" class="btn-book-only">
                     <i class="fas fa-calendar-check"></i>
                     <span>Book Service</span>
                 </a>
@@ -167,13 +290,14 @@
                     <li class="nav-item"><a href="#about" class="nav-link text-white nav-link-underline">About</a></li>
                     <li class="nav-item"><a href="#process" class="nav-link text-white nav-link-underline">Process</a></li>
                     <li class="nav-item"><a href="#why-us" class="nav-link text-white nav-link-underline">Why Us</a></li>
+                    <li class="nav-item"><a href="#gallery" class="nav-link text-white nav-link-underline">Gallery</a></li>
                     <li class="nav-item"><a href="#testimonials" class="nav-link text-white nav-link-underline">Testimonials</a></li>
                     <li class="nav-item"><a href="#faq" class="nav-link text-white nav-link-underline">FAQ</a></li>
                     <li class="nav-item"><a href="#contact" class="nav-link text-white nav-link-underline">Contact</a></li>
 
-                    <!-- ✅ Desktop "Book Service" → WhatsApp -->
+                    <!-- ✅ Desktop "Book Service" → scrolls to contact form -->
                     <li class="nav-item d-none d-lg-block">
-                        <a href="#contact" target="_blank" rel="noopener noreferrer" class="btn-book-nav ms-2">
+                        <a href="#contact" class="btn-book-nav ms-2">
                             <i class="fas fa-calendar-check"></i> Book Service
                         </a>
                     </li>
@@ -183,7 +307,7 @@
         </div>
     </nav>
 
-    <!-- ===== MOBILE MENU – "Book Service Now" → WhatsApp ===== -->
+    <!-- ===== MOBILE MENU – "Book Service Now" → scrolls to contact form ===== -->
     <div id="mobileMenu" class="mobile-menu position-fixed top-0 end-0 h-100 p-4" style="width:300px; z-index:1060; backdrop-filter:blur(20px); background: rgba(10,14,30,0.96) !important; border-left: 1px solid rgba(255,255,255,0.06); box-shadow: -10px 0 40px rgba(0,0,0,0.5);">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <span class="text-white fw-bold fs-5" style="font-family:'Plus Jakarta Sans',sans-serif;">Menu</span>
@@ -194,14 +318,15 @@
             <a href="#services" class="mobile-link text-white-80 px-3 py-2 rounded-3 text-decoration-none fw-medium">Services</a>
             <a href="#about" class="mobile-link text-white-80 px-3 py-2 rounded-3 text-decoration-none fw-medium">About Us</a>
             <a href="#why-us" class="mobile-link text-white-80 px-3 py-2 rounded-3 text-decoration-none fw-medium">Why Us</a>
+            <a href="#gallery" class="mobile-link text-white-80 px-3 py-2 rounded-3 text-decoration-none fw-medium">Gallery</a>
             <a href="#process" class="mobile-link text-white-80 px-3 py-2 rounded-3 text-decoration-none fw-medium">Our Process</a>
             <a href="#testimonials" class="mobile-link text-white-80 px-3 py-2 rounded-3 text-decoration-none fw-medium">Testimonials</a>
             <a href="#faq" class="mobile-link text-white-80 px-3 py-2 rounded-3 text-decoration-none fw-medium">FAQ</a>
             <a href="#contact" class="mobile-link text-white-80 px-3 py-2 rounded-3 text-decoration-none fw-medium">Contact</a>
         </div>
         <div class="mt-4 pt-4 border-top border-white-10" style="border-color: rgba(255,255,255,0.1) !important;">
-            <!-- Mobile menu "Book Service Now" → WhatsApp -->
-            <a href="https://wa.me/+919821935286?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" rel="noopener noreferrer" class="btn-book-only w-100 py-3 rounded-3 fw-semibold text-center" style="justify-content:center; border-radius: 50rem !important;">
+            <!-- Mobile menu "Book Service Now" → scrolls to contact form -->
+            <a href="#contact" class="btn-book-only w-100 py-3 rounded-3 fw-semibold text-center" style="justify-content:center; border-radius: 50rem !important;">
                 <i class="fas fa-calendar-check"></i> Book Service Now
             </a>
         </div>
@@ -241,14 +366,15 @@
                     </ul>
 
                     <div class="d-flex flex-wrap gap-2 feature-buttons mb-3">
-                        <!-- Hero "Book Car AC Service" → WhatsApp -->
-                        <a href="#contact" target="_blank" rel="noopener noreferrer" class="feature-btn feature-btn--primary">
+                        <!-- Hero "Book Car AC Service" → scrolls to contact form -->
+                        <a href="#contact" class="feature-btn feature-btn--primary">
                             <i class="fas fa-book-open"></i> Book Car AC Service
                         </a>
-                        <a href="https://wa.me/+91 9821935286?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" class="feature-btn feature-btn--whatsapp" style="font-size: 17px;">
+                        <!-- WhatsApp Inquiry stays as WhatsApp -->
+                        <a href="https://wa.me/+919821935286?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" class="feature-btn feature-btn--whatsapp" style="font-size: 17px;">
                             <i class="fab fa-whatsapp" style="font-size:25px; color: white;"></i> WhatsApp Inquiry
                         </a>
-                        <a href="tel:+91 9821935286" class="feature-btn feature-btn--call" style="font-size: 17px;">
+                        <a href="tel:+919821935286" class="feature-btn feature-btn--call" style="font-size: 17px;">
                             <i class="fas fa-phone" style="font-size:25px; color: red;"></i> Call Now
                         </a>
                     </div>
@@ -605,8 +731,8 @@
             </div>
 
             <div class="process-footer">
-                <!-- Process "Book Your Car AC Inspection" → WhatsApp -->
-                <a href="https://wa.me/+919821935286?text=Hi%2C%20I%20need%20car%20AC%20repair%20service%20in%20Noida" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                <!-- Process "Book Your Car AC Inspection" → scrolls to contact form -->
+                <a href="#contact" class="btn-primary">
                     Book Your Car AC Inspection
                     <i class="fas fa-arrow-right"></i>
                 </a>
@@ -626,6 +752,84 @@
             <p class="text-info 400 fs-6 mb-2 mx-auto">Car AC service support for multiple vehicle brands.</p>
             <p class="text-white-50 mb-2 mx-auto" style="font-size: 13px;">(Specialized automotive AC repair equipment compatible with Indian, Japanese, Korean, and European models)</p>
             <p class="text-white-50 mt-5 mb-5 mx-auto" style="font-size: 13px;">Specialized independent workshop. Brand names and trademarks are property of their respective owners.</p>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    GALLERY SECTION
+    ============================================================ -->
+    <section id="gallery" class="pt-3" style="background: rgb(10, 18, 30); overflow: hidden;">
+        <div class="container">
+
+            <!-- Gallery Heading -->
+            <div class="text-center mb-5">
+                <h1 class="text-light text-center">Gallery</h1>
+            </div>
+
+            <!-- Image Gallery Grid -->
+            <div class="row g-4 justify-content-center">
+                <!-- Image 1 -->
+                <div class="col-6 col-md-4 col-lg-4">
+                    <div class="gallery-item">
+                        <img src="/assets/images/ac_diagnose.png" alt="Car AC Service 1" class="img-fluid gallery-img" />
+                        <div class="gallery-overlay">
+                            <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
+                            <span class="overlay-text">AC Diagnosis</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Image 2 -->
+                <div class="col-6 col-md-4 col-lg-4">
+                    <div class="gallery-item">
+                        <img src="/assets/images/gas_filling.png" alt="Car AC Service 2" class="img-fluid gallery-img" />
+                        <div class="gallery-overlay">
+                            <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
+                            <span class="overlay-text">Gas filling</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Image 3 -->
+                <div class="col-6 col-md-4 col-lg-4">
+                    <div class="gallery-item">
+                        <img src="/assets/images/compressor_repair.png" alt="Car AC Service 3" class="img-fluid gallery-img" />
+                        <div class="gallery-overlay">
+                            <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
+                            <span class="overlay-text">Compressor Repair</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Image 4 -->
+                <div class="col-6 col-md-4 col-lg-4">
+                    <div class="gallery-item">
+                        <img src="/assets/images/Leak_image.jfif" alt="Car AC Service 4" class="img-fluid gallery-img" />
+                        <div class="gallery-overlay">
+                            <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
+                            <span class="overlay-text">Leak Detection</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Image 5 -->
+                <div class="col-6 col-md-4 col-lg-4">
+                    <div class="gallery-item">
+                        <img src="/assets/images/cooling_coil_image.webp" alt="Car AC Service 5" class="img-fluid gallery-img" />
+                        <div class="gallery-overlay">
+                            <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
+                            <span class="overlay-text">Cooling Coil Cleaning</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Image 6 -->
+                <div class="col-6 col-md-4 col-lg-4">
+                    <div class="gallery-item">
+                        <img src="/assets/images/ac_service_image.png" alt="Car AC Service 6" class="img-fluid gallery-img" />
+                        <div class="gallery-overlay">
+                            <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
+                            <span class="overlay-text">Full AC Service</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -677,213 +881,6 @@
         </div>
     </section>
 
-
-    <!-- gallery-section  -->
-<section id="gallery" class="pt-3" style="background: rgb(10, 18, 30); overflow: hidden;">
-    <div class="container">
-
-        <!-- Gallery Heading -->
-        <div class="text-center mb-5">
-           <h1 class="text-light text-center">Gallery</h1>
-            
-        </div>
-
-        <!-- Image Gallery Grid -->
-        <div class="row g-4 justify-content-center">
-            <!-- Image 1 -->
-            <div class="col-6 col-md-4 col-lg-4">
-                <div class="gallery-item">
-                    <img src="/assets/images/ac_diagnose.png" alt="Car AC Service 1" class="img-fluid gallery-img" />
-                    <div class="gallery-overlay">
-                        <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
-                        <span class="overlay-text">AC Diagnosis</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Image 2 -->
-            <div class="col-6 col-md-4 col-lg-4">
-                <div class="gallery-item">
-                    <img src="/assets/images/gas_filling.png" alt="Car AC Service 2" class="img-fluid gallery-img" />
-                    <div class="gallery-overlay">
-                        <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
-                        <span class="overlay-text">Gas filling</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Image 3 -->
-            <div class="col-6 col-md-4 col-lg-4">
-                <div class="gallery-item">
-                    <img src="/assets/images/compressor_repair.png" alt="Car AC Service 3" class="img-fluid gallery-img" />
-                    <div class="gallery-overlay">
-                        <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
-                        <span class="overlay-text">Compressor Repair</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Image 4 -->
-            <div class="col-6 col-md-4 col-lg-4">
-                <div class="gallery-item">
-                    <img src="/assets/images/Leak_image.jfif" alt="Car AC Service 4" class="img-fluid gallery-img" />
-                    <div class="gallery-overlay">
-                        <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
-                        <span class="overlay-text">Leak Detection</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Image 5 -->
-            <div class="col-6 col-md-4 col-lg-4">
-                <div class="gallery-item">
-                    <img src="/assets/images/cooling_coil_image.webp" alt="Car AC Service 5" class="img-fluid gallery-img" />
-                    <div class="gallery-overlay">
-                        <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
-                        <span class="overlay-text">Cooling Coil Cleaning</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Image 6 -->
-            <div class="col-6 col-md-4 col-lg-4">
-                <div class="gallery-item">
-                    <img src="/assets/images/ac_service_image.png" alt="Car AC Service 6" class="img-fluid gallery-img" />
-                    <div class="gallery-overlay">
-                        <span class="overlay-icon"><i class="fas fa-search-plus"></i></span>
-                        <span class="overlay-text">Full AC Service</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-<style>
-    /* ===== GALLERY ITEM STYLES ===== */
-    .gallery-item {
-        position: relative;
-        overflow: hidden;
-        border-radius: 16px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                    box-shadow 0.4s ease;
-        cursor: pointer;
-        aspect-ratio: 1 / 1;
-        border: 2px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .gallery-item:hover {
-        transform: translateY(-10px) scale(1.02);
-        box-shadow: 0 20px 50px rgba(0, 180, 216, 0.25);
-        border-color: rgba(0, 180, 216, 0.5);
-    }
-
-    .gallery-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-
-    .gallery-item:hover .gallery-img {
-        transform: scale(1.12);
-    }
-
-    /* ===== OVERLAY ===== */
-    .gallery-overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, rgba(10, 18, 30, 0.85), rgba(0, 180, 216, 0.55));
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-        padding: 16px;
-        text-align: center;
-    }
-
-    .gallery-item:hover .gallery-overlay {
-        opacity: 1;
-    }
-
-    .overlay-icon {
-        font-size: 2.2rem;
-        color: #fff;
-        background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(6px);
-        width: 54px;
-        height: 54px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-
-    .gallery-item:hover .overlay-icon {
-        transform: scale(1.1) rotate(-4deg);
-        background: rgba(0, 180, 216, 0.5);
-    }
-
-    .overlay-text {
-        color: #fff;
-        font-weight: 600;
-        font-size: 0.95rem;
-        letter-spacing: 0.5px;
-        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        opacity: 0;
-        transform: translateY(12px);
-        transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
-    }
-
-    .gallery-item:hover .overlay-text {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    /* ===== STAGGER ANIMATION ON LOAD ===== */
-    .gallery-item {
-        opacity: 0;
-        animation: galleryFadeIn 0.7s ease forwards;
-    }
-
-    .gallery-item:nth-child(1) { animation-delay: 0.05s; }
-    .gallery-item:nth-child(2) { animation-delay: 0.10s; }
-    .gallery-item:nth-child(3) { animation-delay: 0.15s; }
-    .gallery-item:nth-child(4) { animation-delay: 0.20s; }
-    .gallery-item:nth-child(5) { animation-delay: 0.25s; }
-    .gallery-item:nth-child(6) { animation-delay: 0.30s; }
-
-    @keyframes galleryFadeIn {
-        0% {
-            opacity: 0;
-            transform: translateY(30px) scale(0.95);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-    }
-
-    /* ===== RESPONSIVE TWEAKS ===== */
-    @media (max-width: 576px) {
-        .overlay-text {
-            font-size: 0.75rem;
-        }
-        .overlay-icon {
-            width: 42px;
-            height: 42px;
-            font-size: 1.6rem;
-        }
-        .gallery-item {
-            border-radius: 12px;
-        }
-    }
-</style>
-
-    <!-- gallery section close  -->
     <!-- ============================================================
     GOOGLE LISTING / CTA BANNER
     ============================================================ -->
@@ -1621,8 +1618,9 @@
             });
         }
 
-        console.log('✅ Weston Cool Care — Contact form sends data to console and WhatsApp!');
+        console.log('✅ Weston Cool Care — All "Book Service" buttons scroll to the contact form!');
     </script>
+    <script src="/assets/js/main.js"></script>
 
 </body>
 </html>
