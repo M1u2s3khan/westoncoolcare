@@ -270,6 +270,7 @@
         }
 
         @media (max-width: 400px) {
+            }
             .btn-book-only {
                 font-size: 0.5rem;
                 padding: 0.2rem 0.4rem;
@@ -280,7 +281,7 @@
             .btn-book-only span {
                 font-size: 0.5rem;
             }
-        }
+        
 
         @media (min-width: 577px) and (max-width: 991px) {
             .btn-book-only {
@@ -1318,7 +1319,6 @@
             background: #e6f2f8;
             color: #1a6b8a;
             font-size: 24px;
-            transition: background 0.3s, color 0.3s;
             margin-bottom: 10px;
         }
         .service-card-sm:hover .icon-circle-sm {
